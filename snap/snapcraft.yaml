@@ -1,4 +1,4 @@
-name: test123
+name: test-123
 version: "0.1.0"
 summary: serve starts a simple temporary static file server in your current directory # 78 char long summary
 description: |
