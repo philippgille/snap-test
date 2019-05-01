@@ -1,0 +1,50 @@
+name: serve
+version: "0.2.1"
+summary: serve starts a simple temporary static file server in your current directory # 78 char long summary
+description: |
+    serve starts a simple temporary static file server in your current directory
+    and prints your IP address to share with colleagues.
+
+    Run `serve -h` to print its usage.
+
+    Press Ctrl+C in the terminal to stop the server.
+
+type: app # "app" is the default, but set it explicitly anyway
+
+# Title and license are "new" and not supported in older versions of snapcraft.
+title: Temporary static file server
+license: MPL-2.0
+
+# There currently seem to be several issues with cross compiling a snap with the go plugin.
+# Without this, and without "--target-arch=...", the snap will be built for the same arch the build is running on.
+# In the future we should check for updates of snapcraft and revisit this option.
+#architectures: ...
+
+base: core18
+
+grade: stable # devel or stable. devel can't be published to the candidate or stable channels.
+confinement: strict # devmode or strict. devmode snaps can't be published to the stable channel. strict leads to no access outside of declared interfaces through plugs.
+
+parts:
+  serve:
+    # Go plugin source code: https://github.com/snapcore/snapcraft/blob/master/snapcraft/plugins/go.py
+    plugin: go
+    # Set go-channel to an empty string so that the Go plugin doesn't use the unofficial Go snap for building.
+    # We want to use the OS's package manager's Go package.
+    # When using a recent version of snapcraft, building a snap is done in a VM which is currently Ubuntu 18.04,
+    # so even when using an older Ubuntu 16 as host, at least Go 1.10 is used.
+    go-channel: ""
+    # Using the repository instead of "." makes it possible to use this file standalone
+    # and also leads to reproducable builds thanks to the tag (in case it's used instead of a source-depth of 1).
+    source: https://github.com/philippgille/serve
+    source-type: git
+    source-depth: 1
+    source-branch: master
+    # source-tag: v0.2.1 # Either use a source-depth of 1 for the latest commit, OR a source-tag
+
+apps:
+  serve:
+    command: serve
+    plugs:
+      - network-bind # For acting as HTTP server
+      - home # For access to the user's $HOME directory, needed to serve its files
