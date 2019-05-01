@@ -1,4 +1,4 @@
-name: test-123
+name: test123
 version: "0.1.0"
 summary: serve starts a simple temporary static file server in your current directory # 78 char long summary
 description: |
@@ -39,7 +39,7 @@ parts:
     source: https://github.com/philippgille/serve
     source-type: git
     source-depth: 1
-    source-branch: master
+    source-branch: develop
     # source-tag: v0.2.1 # Either use a source-depth of 1 for the latest commit, OR a source-tag
 
 apps:
